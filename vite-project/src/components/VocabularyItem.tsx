@@ -7,16 +7,20 @@ interface Props {
   onEdit: (vocab: Vocabulary) => void;
 }
 
-const VocabularyItem: React.FC<Props> = ({ vocab, onDelete, onEdit }) => {
+function VocabularyItem(props: Props) {
+  const { vocab, onDelete, onEdit } = props;
+
   return (
-    <div className='flex mt-4 ml-30'>
-      <div className='flex gap-29.5 text-[20px]'><strong>{vocab.english}</strong> :  {vocab.vietnamese}</div>
-      <div className='flex gap-5 ml-120 text-[20px]'>
+    <div className='flex justify-between items-center mt-4 ml-8 mr-8 p-2 bg-white rounded shadow'>
+      <div className='text-[18px] font-medium'>
+        <strong>{vocab.english}</strong>: {vocab.vietnamese}
+      </div>
+      <div className='flex gap-4 text-[18px]'>
         <button onClick={() => onEdit(vocab)}>Sửa</button>
-      <button onClick={() => onDelete(vocab)}>Xóa</button>
+        <button onClick={() => onDelete(vocab)}>Xóa</button>
       </div>
     </div>
   );
-};
+}
 
 export default VocabularyItem;

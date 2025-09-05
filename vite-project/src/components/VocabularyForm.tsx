@@ -9,17 +9,17 @@ interface Props {
   existingEnglishWords: string[];
 }
 
-const VocabularyForm: React.FC<Props> = ({ onSubmit, editing, onCancelEdit, existingEnglishWords }) => {
+function VocabularyForm(props: Props) {
   const [english, setEnglish] = useState('');
   const [vietnamese, setVietnamese] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (editing) {
-      setEnglish(editing.english);
-      setVietnamese(editing.vietnamese);
+    if (props.editing) {
+      setEnglish(props.editing.english);
+      setVietnamese(props.editing.vietnamese);
     }
-  }, [editing]);
+  }, [props.editing]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,17 +28,18 @@ const VocabularyForm: React.FC<Props> = ({ onSubmit, editing, onCancelEdit, exis
     }
 
     if (
-      existingEnglishWords.includes(english.toLowerCase()) &&
-      (!editing || editing.english.toLowerCase() !== english.toLowerCase())
+      props.existingEnglishWords.includes(english.toLowerCase()) &&
+      (!props.editing || props.editing.english.toLowerCase() !== english.toLowerCase())
     ) {
       return setError('Từ tiếng Anh đã tồn tại!');
     }
 
-    onSubmit({
-      id: editing ? editing.id : crypto.randomUUID(),
+    props.onSubmit({
+      id: props.editing ? props.editing.id : crypto.randomUUID(),
       english,
       vietnamese,
     });
+
     setEnglish('');
     setVietnamese('');
     setError('');
@@ -46,20 +47,18 @@ const VocabularyForm: React.FC<Props> = ({ onSubmit, editing, onCancelEdit, exis
 
   return (
     <form onSubmit={handleSubmit}>
-    <div className='flex mt-8 ml-30 text-green-500 text-[24px] font-semibold  '>
-        <CirclePlus
-        size={40}
-        /> {editing ? 'Cập nhật từ vựng' : 'Thêm từ mới'}
-    </div>
-      <div className=' flex mt-4 ml-30 gap-4'>
-        <input className='bg-gray-100 p-2 border border-black' size={40} value={english} onChange={e => setEnglish(e.target.value)} placeholder="English" />
-      <input className='bg-gray-100 p-2 border border-black' size={40} value={vietnamese} onChange={e => setVietnamese(e.target.value)} placeholder="Tiếng Việt" />
-      <button className='p-2 bg-green-500' type="submit">{editing ? 'Cập nhật' : 'Thêm'}</button>
-      {editing && <button onClick={onCancelEdit}>Hủy</button>}
+      <div className='flex mt-8 ml-8 text-green-500 text-[24px] font-semibold'>
+        <CirclePlus size={40} /> {props.editing ? 'Cập nhật từ vựng' : 'Thêm từ mới'}
       </div>
-      <div className='flex mt-0 ml-30'> {error && <p style={{ color: 'red' }}>{error}</p>}</div>
+      <div className='flex mt-4 ml-8 gap-4'>
+        <input className='bg-gray-100 p-2 border border-black' size={40} value={english} onChange={e => setEnglish(e.target.value)} placeholder="English" />
+        <input className='bg-gray-100 p-2 border border-black' size={40} value={vietnamese} onChange={e => setVietnamese(e.target.value)} placeholder="Tiếng Việt" />
+        <button className='p-2 bg-green-500 text-white' type="submit">{props.editing ? 'Cập nhật' : 'Thêm'}</button>
+        {props.editing && <button type="button" onClick={props.onCancelEdit}>Hủy</button>}
+      </div>
+      <div className='flex mt-1 ml-8'>{error && <p className="text-red-500">{error}</p>}</div>
     </form>
   );
-};
+}
 
 export default VocabularyForm;

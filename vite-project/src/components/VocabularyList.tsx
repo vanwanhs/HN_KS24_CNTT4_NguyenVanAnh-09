@@ -8,11 +8,13 @@ interface Props {
   onEdit: (v: Vocabulary) => void;
 }
 
-const VocabularyList: React.FC<Props> = ({ vocabularies, onDelete, onEdit }) => {
+function VocabularyList(props: Props) {
+  const { vocabularies, onDelete, onEdit } = props;
+
   return (
     <div>
       {vocabularies.length === 0 ? (
-        <p className='flex mt-4 ml-30 text-[30px] text-red-600'>Không có từ vựng nào.</p>
+        <p className='flex mt-4 ml-8 text-[20px] text-red-600'>Không có từ vựng nào.</p>
       ) : (
         vocabularies.map(v => (
           <VocabularyItem key={v.id} vocab={v} onDelete={onDelete} onEdit={onEdit} />
@@ -20,6 +22,6 @@ const VocabularyList: React.FC<Props> = ({ vocabularies, onDelete, onEdit }) => 
       )}
     </div>
   );
-};
+}
 
 export default VocabularyList;
